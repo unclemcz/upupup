@@ -10,11 +10,8 @@
 
 
 ## 效果
-<video width="320"  controls>
-  <source src="https://github.com/unclemcz/upupup/blob/main/resources/screen.webm" type="video/webm">
-  Your browser does not support the video tag.
-</video>
 
+![效果](/resources/screen.gif)
 
 
 ## 使用
