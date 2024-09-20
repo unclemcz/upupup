@@ -11,7 +11,7 @@
 
 ## 效果
 <video width="320"  controls>
-  <source src="/resources/screen.webm" type="video/webm">
+  <source src="https://github.com/unclemcz/upupup/blob/main/resources/screen.webm" type="video/webm">
   Your browser does not support the video tag.
 </video>
 
