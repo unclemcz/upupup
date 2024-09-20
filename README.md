@@ -9,8 +9,11 @@
 - [runparrot](https://github.com/rainbowflesh/runparrot)
 
 
-## 截图
-![效果](/resources/screen.gif)
+## 效果
+<video width="320"  controls>
+  <source src="/resources/screen.webm" type="video/webm">
+  Your browser does not support the video tag.
+</video>
 
 
 
