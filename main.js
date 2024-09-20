@@ -7,11 +7,11 @@ const fs = require('node:fs');
 let mainWindow
 let tray = null
 let trayIconIntervalId = null
-let currentFrequency = 30 //分钟
+let currentFrequency = 0.1 //分钟
 
 let currentTime = new Date().getTime(); //获取当前时间戳
 let currentAnimal = 'catwhite';
-let currentStatus = 'idle';
+let currentStatus = 'active';
 let notice = false;
 
 //获取一个具体文件夹下的所有png图片，返回一个数组
@@ -72,12 +72,25 @@ function createTray() {
   const animalPng = getAnimalPng('/resources/icons/',currentAnimal,currentStatus);
   const trayIcon = nativeImage.createFromPath(path.join(__dirname, animalPng[0]));
   tray = new Tray(trayIcon)
+  let trayIconIndex = 0
+  if (trayIconIntervalId) {
+    clearInterval(trayIconIntervalId);
+  }
+  trayIconIntervalId = setInterval(() => {
+    trayIconIndex = (trayIconIndex + 1) % animalPng.length
+    const newIcon = nativeImage.createFromPath(path.join(__dirname, animalPng[trayIconIndex]))
+    tray.setImage(newIcon)
+  }, 150);
+
   const contextMenu = Menu.buildFromTemplate([
     { label: '重新专注', type: 'normal', 
       click: () => { 
-        currentTime = new Date().getTime();  
-        notice = false;
-      } 
+        let t = new Date().getTime();
+        if (t-currentTime >= 1000*60*currentFrequency) {
+          currentTime = new Date().getTime();
+          notice = false;
+        }
+      }
     },
     { label: '设置频率', type: 'normal', click: () => { mainWindow.show() } },
     { label: '退出', type: 'normal', 
@@ -134,18 +147,18 @@ app.whenReady().then(() => {
     let diff = t - currentTime; //计算时间差
     console.log(diff,currentAnimal,currentFrequency,currentStatus);
     if (diff >= currentFrequency*60*1000) {
-      if(currentStatus == 'idle' ) {
-        changeTrayIcon(currentAnimal,'active');
-        currentStatus = 'active';
+      if(currentStatus == 'active' ) {
+        changeTrayIcon(currentAnimal,'idle');
+        currentStatus = 'idle';
         if (!notice) {
           notification();
           notice = true; //通知一次就够了
         }
       }
     }else{
-      if(currentStatus == 'active') {
-        changeTrayIcon(currentAnimal,'idle');
-        currentStatus = 'idle';
+      if(currentStatus == 'idle') {
+        changeTrayIcon(currentAnimal,'active');
+        currentStatus = 'active';
       }
     }
   }, 1000);
