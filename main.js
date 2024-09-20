@@ -7,7 +7,7 @@ const fs = require('node:fs');
 let mainWindow
 let tray = null
 let trayIconIntervalId = null
-let currentFrequency = 0.1 //分钟
+let currentFrequency = 30 //分钟
 
 let currentTime = new Date().getTime(); //获取当前时间戳
 let currentAnimal = 'catwhite';
