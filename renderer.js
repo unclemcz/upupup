@@ -29,3 +29,4 @@ const appversion = document.getElementById('app-version');
 window.electronAPI.onVersion((value) => {
   appversion.innerText = value;
 })
+

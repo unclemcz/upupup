@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow,Tray, Menu,Notification, nativeImage,ipcMain } = require('electron')
+const { app, BrowserWindow,Tray, Menu,Notification,dialog, nativeImage,ipcMain } = require('electron')
 const path = require('node:path')
 const fs = require('node:fs');
 
@@ -7,7 +7,7 @@ const fs = require('node:fs');
 let mainWindow
 let tray = null
 let trayIconIntervalId = null
-let currentFrequency = 0.1 //分钟
+let currentFrequency = 30 //分钟
 
 let currentTime = new Date().getTime(); //获取当前时间戳
 let currentAnimal = 'catwhite';
@@ -89,6 +89,19 @@ function createTray() {
         if (t-currentTime >= 1000*60*currentFrequency) {
           currentTime = new Date().getTime();
           notice = false;
+        }else{
+          //弹框确认，如果点是则notice设置为false，否则忽略
+          dialog.showMessageBox({
+            type: 'question',
+            message: '是否重新设置开始时间？',
+            buttons: ['是', '否']
+          }).then(result => {
+            console.log(result.response);
+            if (result.response === 0) {
+              currentTime = new Date().getTime();
+              notice = false;
+            }
+          });
         }
       }
     },
